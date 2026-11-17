@@ -1,0 +1,121 @@
+@startchen mer_completo_3_partida_draft
+' ============================================================
+' MER COMPLETO - ÁREA 3: PARTIDA E DRAFT
+' Entidades desta área com todos os atributos:
+'   PARTIDA, ESCALACAO, SELECAO_CAMPEAO, CAMPEAO
+' Entidades de outras áreas sem atributos:
+'   SERIE, EQUIPE, JOGADOR, ORGANIZADOR, FUNCAO
+' ------------------------------------------------------------
+' Convenção (leitura pelo lado oposto): cada linha liga o losango a UMA entidade B
+' ("B -(mín,máx)- rel" ou "rel -(mín,máx)- B"); o par responde
+' "para cada A (a outra entidade), quantos B?" e fica junto de B.
+' <<key>> em entidade fraca = identificador parcial.
+' ESCALACAO é fraca com dois donos (PARTIDA e JOGADOR) e não
+' tem identificador parcial: é identificada pelos dois donos.
+' ============================================================
+
+entity PARTIDA <<weak>> {
+  numero <<key>>
+  duracao
+  captura_tela
+  data_hora_registro
+  situacao_resultado <<derived>>
+}
+
+entity ESCALACAO <<weak>> {
+}
+
+entity SELECAO_CAMPEAO <<weak>> {
+  ordem <<key>>
+  tipo
+}
+
+entity CAMPEAO {
+  id_campeao <<key>>
+  nome
+}
+
+' --- entidades de outras áreas (sem atributos) ---
+entity SERIE {
+}
+entity EQUIPE {
+}
+entity JOGADOR {
+}
+entity ORGANIZADOR {
+}
+entity FUNCAO {
+}
+
+' --- relacionamentos ---
+relationship "é disputada em" as e_disputada_em <<identifying>> {
+}
+relationship "joga no lado azul" as joga_lado_azul {
+}
+relationship "joga no lado vermelho" as joga_lado_vermelho {
+}
+relationship "vence" as vence {
+}
+relationship "avalia resultado" as avalia_resultado {
+  parecer
+  data_hora_parecer
+}
+relationship "julga contestação" as julga_contestacao {
+  decisao_julgamento
+  data_julgamento
+}
+relationship "inclui" as inclui <<identifying>> {
+}
+relationship "escala" as escala <<identifying>> {
+}
+relationship "atribui" as atribui {
+}
+relationship "registra" as registra <<identifying>> {
+}
+relationship "seleciona" as seleciona {
+}
+relationship "realiza" as realiza {
+}
+relationship "usa" as usa {
+}
+
+SERIE -(1,1)- e_disputada_em
+e_disputada_em =(0,N)= PARTIDA
+
+EQUIPE -(0,1)- joga_lado_azul
+joga_lado_azul -(0,N)- PARTIDA
+
+EQUIPE -(0,1)- joga_lado_vermelho
+joga_lado_vermelho -(0,N)- PARTIDA
+
+EQUIPE -(1,1)- vence
+vence -(0,N)- PARTIDA
+
+JOGADOR -(0,2)- avalia_resultado
+avalia_resultado -(0,N)- PARTIDA
+
+ORGANIZADOR -(0,1)- julga_contestacao
+julga_contestacao -(0,N)- PARTIDA
+
+PARTIDA -(1,1)- inclui
+inclui =(0,N)= ESCALACAO
+
+JOGADOR -(1,1)- escala
+escala =(0,N)= ESCALACAO
+
+ESCALACAO -(0,N)- atribui
+atribui -(1,1)- FUNCAO
+
+PARTIDA -(1,1)- registra
+registra =(0,N)= SELECAO_CAMPEAO
+
+SELECAO_CAMPEAO -(0,N)- seleciona
+seleciona -(1,1)- CAMPEAO
+
+EQUIPE -(1,1)- realiza
+realiza -(0,N)- SELECAO_CAMPEAO
+
+ESCALACAO -(0,1)- usa
+usa -(1,1)- SELECAO_CAMPEAO
+
+@endchen

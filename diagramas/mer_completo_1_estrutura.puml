@@ -1,0 +1,103 @@
+@startchen mer_completo_1_estrutura
+' ============================================================
+' MER COMPLETO - ÁREA 1: ESTRUTURA DO CAMPEONATO
+' Entidades desta área com todos os atributos:
+'   CAMPEONATO, FASE, RODADA, SERIE, CLASSIFICACAO
+' Entidades de outras áreas aparecem sem atributos
+' (ORGANIZADOR, EQUIPE, ARBITRO): os atributos delas
+' estão no arquivo da área em que são definidas.
+' ------------------------------------------------------------
+' Convenção (leitura pelo lado oposto): cada linha liga o losango a UMA entidade B
+' ("B -(mín,máx)- rel" ou "rel -(mín,máx)- B"); o par responde
+' "para cada A (a outra entidade), quantos B?" e fica junto de B.
+' <<key>> em entidade fraca = identificador parcial.
+' ============================================================
+
+entity CAMPEONATO {
+  id_campeonato <<key>>
+  nome
+  edicao
+  prazo_inscricao
+  periodo {
+    data_inicio
+    data_fim
+  }
+  numero_vagas
+  situacao
+}
+
+entity FASE <<weak>> {
+  nome <<key>>
+}
+
+entity RODADA <<weak>> {
+  numero <<key>>
+  formato_serie
+  data
+  vitorias_necessarias <<derived>>
+}
+
+entity SERIE {
+  id_serie <<key>>
+  data_hora
+}
+
+entity CLASSIFICACAO <<weak>> {
+  posicao <<key>>
+  vitorias <<derived>>
+  derrotas <<derived>>
+  soma_vitorias_adversarios <<derived>>
+}
+
+' --- entidades de outras áreas (sem atributos) ---
+entity ORGANIZADOR {
+}
+entity EQUIPE {
+}
+entity ARBITRO {
+}
+
+' --- relacionamentos ---
+relationship "cria" as cria {
+}
+relationship "divide-se em" as divide_se_em <<identifying>> {
+}
+relationship "é composta por" as e_composta_por <<identifying>> {
+}
+relationship "reúne" as reune {
+}
+relationship "disputa" as disputa {
+  compareceu
+}
+relationship "arbitra" as arbitra {
+}
+relationship "resulta em" as resulta_em <<identifying>> {
+}
+relationship "ocupa" as ocupa {
+}
+
+ORGANIZADOR -(1,1)- cria
+cria -(0,N)- CAMPEONATO
+
+CAMPEONATO -(1,1)- divide_se_em
+divide_se_em =(3,3)= FASE
+
+FASE -(1,1)- e_composta_por
+e_composta_por =(1,N)= RODADA
+
+RODADA -(1,1)- reune
+reune -(0,N)- SERIE
+
+EQUIPE -(2,2)- disputa
+disputa -(0,N)- SERIE
+
+SERIE -(0,N)- arbitra
+arbitra -(1,1)- ARBITRO
+
+FASE -(1,1)- resulta_em
+resulta_em =(0,N)= CLASSIFICACAO
+
+CLASSIFICACAO -(0,1)- ocupa
+ocupa -(1,1)- EQUIPE
+
+@endchen

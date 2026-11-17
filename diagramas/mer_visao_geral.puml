@@ -1,0 +1,273 @@
+@startchen mer_visao_geral
+' scale 0.8: sem ela o PNG passa de 4096 px de altura e o servidor do PlantUML corta a imagem
+scale 0.8
+' ============================================================
+' MER - VISÃO GERAL (só entidades, relacionamentos e cardinalidades)
+' Campeonato universitário de League of Legends - UFSC Florianópolis
+' CIN 8003 - Projeto Final - Mateus Nunes Oliveira
+' ------------------------------------------------------------
+' CONVENÇÃO DE CARDINALIDADE (leitura pelo lado oposto):
+'   Cada linha liga um losango a UMA entidade B (escrita
+'   "B -(mín,máx)- rel" ou "rel -(mín,máx)- B"). O par dessa linha
+'   responde "para cada A (a outra entidade de rel), quantos B?"
+'   e por isso fica no trecho da linha que chega em B.
+'   (A ordem da escrita só orienta o layout de cima para baixo.)
+' Linha dupla (=) = vínculo identificador da entidade fraca.
+' Losango duplo = relacionamento identificador (<<identifying>>).
+' ============================================================
+
+' ---------- Entidades fortes ----------
+entity CAMPEONATO {
+}
+entity SERIE {
+}
+entity EQUIPE {
+}
+entity CURSO {
+}
+entity CENTRO_ENSINO {
+}
+entity JOGADOR {
+}
+entity COACH {
+}
+entity FUNCAO {
+}
+entity CAMPEAO {
+}
+entity ARBITRO {
+}
+entity ORGANIZADOR {
+}
+entity PATROCINADOR {
+}
+entity PUNICAO {
+}
+
+' ---------- Entidades fracas ----------
+entity FASE <<weak>> {
+}
+entity RODADA <<weak>> {
+}
+entity PARTIDA <<weak>> {
+}
+entity INSCRICAO <<weak>> {
+}
+entity ESCALACAO <<weak>> {
+}
+entity SELECAO_CAMPEAO <<weak>> {
+}
+entity CLASSIFICACAO <<weak>> {
+}
+entity PREMIACAO <<weak>> {
+}
+
+' ---------- Área 1: estrutura do campeonato ----------
+relationship "cria" as cria {
+}
+relationship "divide-se em" as divide_se_em <<identifying>> {
+}
+relationship "é composta por" as e_composta_por <<identifying>> {
+}
+relationship "reúne" as reune {
+}
+relationship "disputa" as disputa {
+}
+relationship "arbitra" as arbitra {
+}
+relationship "resulta em" as resulta_em <<identifying>> {
+}
+relationship "ocupa" as ocupa {
+}
+
+ORGANIZADOR -(1,1)- cria
+cria -(0,N)- CAMPEONATO
+
+CAMPEONATO -(1,1)- divide_se_em
+divide_se_em =(3,3)= FASE
+
+FASE -(1,1)- e_composta_por
+e_composta_por =(1,N)= RODADA
+
+RODADA -(1,1)- reune
+reune -(0,N)- SERIE
+
+EQUIPE -(2,2)- disputa
+disputa -(0,N)- SERIE
+
+SERIE -(0,N)- arbitra
+arbitra -(1,1)- ARBITRO
+
+FASE -(1,1)- resulta_em
+resulta_em =(0,N)= CLASSIFICACAO
+
+CLASSIFICACAO -(0,1)- ocupa
+ocupa -(1,1)- EQUIPE
+
+' ---------- Área 2: equipes e pessoas ----------
+relationship "participa de" as participa_de {
+}
+relationship "representa" as representa {
+}
+relationship "pertence a" as pertence_a {
+}
+relationship "envia" as envia <<identifying>> {
+}
+relationship "decide" as decide {
+}
+relationship "tem no elenco" as tem_no_elenco {
+}
+relationship "é capitaneada por" as e_capitaneada_por {
+}
+relationship "é orientada por" as e_orientada_por {
+}
+relationship "é titular em" as e_titular_em {
+}
+relationship "tem vínculo com" as tem_vinculo_com {
+}
+
+CAMPEONATO -(1,1)- participa_de
+participa_de -(0,N)- EQUIPE
+
+CURSO -(1,1)- representa
+representa -(0,N)- EQUIPE
+
+CENTRO_ENSINO -(1,1)- pertence_a
+pertence_a -(1,N)- CURSO
+
+EQUIPE -(1,1)- envia
+envia =(1,N)= INSCRICAO
+
+ORGANIZADOR -(0,1)- decide
+decide -(0,N)- INSCRICAO
+
+EQUIPE -(1,1)- tem_no_elenco
+tem_no_elenco -(1,6)- JOGADOR
+
+EQUIPE -(0,1)- e_capitaneada_por
+e_capitaneada_por -(1,1)- JOGADOR
+
+EQUIPE -(1,1)- e_orientada_por
+e_orientada_por -(0,1)- COACH
+
+JOGADOR -(0,N)- e_titular_em
+e_titular_em -(0,1)- FUNCAO
+
+CURSO -(0,N)- tem_vinculo_com
+tem_vinculo_com -(0,N)- ARBITRO
+
+' ---------- Área 3: partida e draft ----------
+relationship "é disputada em" as e_disputada_em <<identifying>> {
+}
+relationship "joga no lado azul" as joga_lado_azul {
+}
+relationship "joga no lado vermelho" as joga_lado_vermelho {
+}
+relationship "vence" as vence {
+}
+relationship "avalia resultado" as avalia_resultado {
+}
+relationship "julga contestação" as julga_contestacao {
+}
+relationship "inclui" as inclui <<identifying>> {
+}
+relationship "escala" as escala <<identifying>> {
+}
+relationship "atribui" as atribui {
+}
+relationship "registra" as registra <<identifying>> {
+}
+relationship "seleciona" as seleciona {
+}
+relationship "realiza" as realiza {
+}
+relationship "usa" as usa {
+}
+
+SERIE -(1,1)- e_disputada_em
+e_disputada_em =(0,N)= PARTIDA
+
+EQUIPE -(0,1)- joga_lado_azul
+joga_lado_azul -(0,N)- PARTIDA
+
+EQUIPE -(0,1)- joga_lado_vermelho
+joga_lado_vermelho -(0,N)- PARTIDA
+
+EQUIPE -(1,1)- vence
+vence -(0,N)- PARTIDA
+
+JOGADOR -(0,2)- avalia_resultado
+avalia_resultado -(0,N)- PARTIDA
+
+ORGANIZADOR -(0,1)- julga_contestacao
+julga_contestacao -(0,N)- PARTIDA
+
+PARTIDA -(1,1)- inclui
+inclui =(0,N)= ESCALACAO
+
+JOGADOR -(1,1)- escala
+escala =(0,N)= ESCALACAO
+
+ESCALACAO -(0,N)- atribui
+atribui -(1,1)- FUNCAO
+
+PARTIDA -(1,1)- registra
+registra =(0,N)= SELECAO_CAMPEAO
+
+SELECAO_CAMPEAO -(0,N)- seleciona
+seleciona -(1,1)- CAMPEAO
+
+EQUIPE -(1,1)- realiza
+realiza -(0,N)- SELECAO_CAMPEAO
+
+ESCALACAO -(0,1)- usa
+usa -(1,1)- SELECAO_CAMPEAO
+
+' ---------- Área 4: punições, patrocínio e premiação ----------
+relationship "patrocina" as patrocina {
+}
+relationship "oferece" as oferece <<identifying>> {
+}
+relationship "contempla" as contempla {
+}
+relationship "recai sobre (jogador)" as recai_sobre_jogador {
+}
+relationship "recai sobre (equipe)" as recai_sobre_equipe {
+}
+relationship "ocorre em" as ocorre_em {
+}
+relationship "é cumprida em" as e_cumprida_em {
+}
+relationship "aplica (árbitro)" as aplica_arbitro {
+}
+relationship "aplica (organizador)" as aplica_organizador {
+}
+
+PATROCINADOR -(0,N)- patrocina
+patrocina -(1,N)- CAMPEONATO
+
+CAMPEONATO -(1,1)- oferece
+oferece =(0,N)= PREMIACAO
+
+PREMIACAO -(0,1)- contempla
+contempla -(0,N)- EQUIPE
+
+JOGADOR -(0,1)- recai_sobre_jogador
+recai_sobre_jogador -(0,N)- PUNICAO
+
+EQUIPE -(0,1)- recai_sobre_equipe
+recai_sobre_equipe -(0,N)- PUNICAO
+
+PARTIDA -(0,1)- ocorre_em
+ocorre_em -(0,N)- PUNICAO
+
+PARTIDA -(0,1)- e_cumprida_em
+e_cumprida_em -(0,N)- PUNICAO
+
+ARBITRO -(0,1)- aplica_arbitro
+aplica_arbitro -(0,N)- PUNICAO
+
+ORGANIZADOR -(0,1)- aplica_organizador
+aplica_organizador -(0,N)- PUNICAO
+
+@endchen

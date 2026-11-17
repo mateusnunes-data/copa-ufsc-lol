@@ -1,0 +1,20 @@
+Copa UFSC de League of Legends - links externos usados no projeto e na apresentacao
+Autor: Mateus Nunes Oliveira - CIN 8003 Bancos de Dados e Aplicacoes (UFSC)
+
+== Ferramentas ==
+https://github.com/                        Hospedagem do repositorio do projeto
+https://sqliteonline.com/                  SQLite Online: execucao dos scripts e demonstracao das consultas
+https://www.plantuml.com/plantuml/         Servidor do PlantUML: geracao dos diagramas do MER (docs/img/mer_*.png)
+https://mermaid.live/                      Editor do Mermaid: exportacao do esquema relacional (docs/img/esquema_relacional.png)
+
+== Referencias do documento de requisitos (docs/01_requisitos.md) ==
+https://www.gov.br/anpd/pt-br/assuntos/noticias/anpd-divulga-enunciado-sobre-o-tratamento-de-dados-pessoais-de-criancas-e-adolescentes/Enunciado1ANPD.pdf
+https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm
+https://www.planalto.gov.br/ccivil_03/leis/l8069.htm
+https://portal.ifpe.edu.br/wp-content/uploads/repositoriolegado/vitoria/documentos/copy_of_RegulamentoLoLVITRIA.pdf
+https://assets.contentstack.io/v3/assets/bltad9188aa9a70543a/blt79206b2e169458e4/644324171d4d37184e1cda9c/2023_MSI_Rule_Set_vFinal_(EN).pdf
+https://lolesports.com/en-US/news/lol-esports-community-competition-guidelines
+https://lolesports.com/en-US/news/lol-esports-in-2025
+https://feiradecursos.paginas.ufsc.br/files/2023/08/Guia-de-cursos-UFSC-16Revisado-com-ISBN_compressed-1.pdf
+https://vestibularlibras2027.ufsc.br/files/2026/07/Edital-Letras-Libras-2027.pdf
+https://proae.ufu.br/sites/proae.ufu.br/files/media/arquivo/regulamento_especifico_-_league_of_legends.pdf

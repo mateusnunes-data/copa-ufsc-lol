@@ -1,0 +1,154 @@
+@startchen mer_completo_2_equipes_pessoas
+' ============================================================
+' MER COMPLETO - ÁREA 2: EQUIPES E PESSOAS
+' Entidades desta área com todos os atributos:
+'   EQUIPE, CURSO, CENTRO_ENSINO, INSCRICAO, JOGADOR, COACH,
+'   FUNCAO, ARBITRO, ORGANIZADOR
+' Entidade de outra área sem atributos: CAMPEONATO.
+' ------------------------------------------------------------
+' Convenção (leitura pelo lado oposto): cada linha liga o losango a UMA entidade B
+' ("B -(mín,máx)- rel" ou "rel -(mín,máx)- B"); o par responde
+' "para cada A (a outra entidade), quantos B?" e fica junto de B.
+' <<key>> em entidade fraca = identificador parcial.
+' ============================================================
+
+entity EQUIPE {
+  id_equipe <<key>>
+  chave_play_in
+  situacao <<derived>>
+  colocacao_final <<derived>>
+}
+
+entity CURSO {
+  id_curso <<key>>
+  nome
+}
+
+entity CENTRO_ENSINO {
+  sigla <<key>>
+  nome
+}
+
+entity INSCRICAO <<weak>> {
+  data_hora_envio <<key>>
+  aval_curso {
+    responsavel_aval
+    data_aval
+  }
+  situacao <<derived>>
+}
+
+entity JOGADOR {
+  id_jogador <<key>>
+  nome_completo
+  nome_exibicao
+  matricula
+  email
+  data_nascimento
+  idade <<derived>>
+  riot_id {
+    nome_de_jogo
+    tag
+  }
+  riot_id_verificado
+  comprovante_matricula
+  autorizacao_responsavel {
+    nome_responsavel
+    contato_responsavel
+    documento_autorizacao
+  }
+}
+
+entity COACH {
+  id_coach <<key>>
+  nome
+  matricula
+  comprovante_matricula
+  contato {
+    email
+    telefone
+  }
+}
+
+entity FUNCAO {
+  nome <<key>>
+}
+
+entity ARBITRO {
+  id_arbitro <<key>>
+  nome
+  contato {
+    email
+    telefone
+  }
+}
+
+entity ORGANIZADOR {
+  id_organizador <<key>>
+  nome
+  contato {
+    email
+    telefone
+  }
+}
+
+' --- entidade de outra área (sem atributos) ---
+entity CAMPEONATO {
+}
+
+' --- relacionamentos ---
+relationship "participa de" as participa_de {
+}
+relationship "representa" as representa {
+}
+relationship "pertence a" as pertence_a {
+}
+relationship "envia" as envia <<identifying>> {
+}
+relationship "decide" as decide {
+  resultado_decisao
+  data_decisao
+  motivo_recusa
+}
+relationship "tem no elenco" as tem_no_elenco {
+}
+relationship "é capitaneada por" as e_capitaneada_por {
+}
+relationship "é orientada por" as e_orientada_por {
+}
+relationship "é titular em" as e_titular_em {
+}
+relationship "tem vínculo com" as tem_vinculo_com {
+}
+
+CAMPEONATO -(1,1)- participa_de
+participa_de -(0,N)- EQUIPE
+
+CURSO -(1,1)- representa
+representa -(0,N)- EQUIPE
+
+CENTRO_ENSINO -(1,1)- pertence_a
+pertence_a -(1,N)- CURSO
+
+EQUIPE -(1,1)- envia
+envia =(1,N)= INSCRICAO
+
+ORGANIZADOR -(0,1)- decide
+decide -(0,N)- INSCRICAO
+
+EQUIPE -(1,1)- tem_no_elenco
+tem_no_elenco -(1,6)- JOGADOR
+
+EQUIPE -(0,1)- e_capitaneada_por
+e_capitaneada_por -(1,1)- JOGADOR
+
+EQUIPE -(1,1)- e_orientada_por
+e_orientada_por -(0,1)- COACH
+
+JOGADOR -(0,N)- e_titular_em
+e_titular_em -(0,1)- FUNCAO
+
+CURSO -(0,N)- tem_vinculo_com
+tem_vinculo_com -(0,N)- ARBITRO
+
+@endchen

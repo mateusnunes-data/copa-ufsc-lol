@@ -1,0 +1,230 @@
+erDiagram
+    ORGANIZADOR {
+        atr id_organizador PK
+        atr nome
+        atr email
+        atr telefone
+    }
+    CAMPEONATO {
+        atr id_campeonato PK
+        atr nome
+        atr edicao
+        atr prazo_inscricao
+        atr data_inicio
+        atr data_fim
+        atr numero_vagas
+        atr situacao
+        atr id_organizador FK
+    }
+    FASE {
+        atr id_campeonato PK, FK
+        atr nome PK
+    }
+    RODADA {
+        atr id_campeonato PK, FK
+        atr nome_fase PK, FK
+        atr numero PK
+        atr formato_serie
+        atr data
+    }
+    ARBITRO {
+        atr id_arbitro PK
+        atr nome
+        atr email
+        atr telefone
+    }
+    SERIE {
+        atr id_serie PK
+        atr data_hora
+        atr id_campeonato FK
+        atr nome_fase FK
+        atr numero_rodada FK
+        atr id_arbitro FK
+    }
+    DISPUTA {
+        atr id_serie PK, FK
+        atr id_equipe PK, FK
+        atr compareceu
+    }
+    CLASSIFICACAO {
+        atr id_campeonato PK, FK
+        atr nome_fase PK, FK
+        atr posicao PK
+        atr id_equipe FK
+    }
+    VINCULO_ARBITRO_CURSO {
+        atr id_arbitro PK, FK
+        atr id_curso PK, FK
+    }
+    PATROCINADOR {
+        atr id_patrocinador PK
+        atr nome
+        atr ramo_atividade
+        atr email
+        atr telefone
+    }
+    PATROCINIO {
+        atr id_campeonato PK, FK
+        atr id_patrocinador PK, FK
+        atr valor_cota
+    }
+    PREMIACAO {
+        atr id_campeonato PK, FK
+        atr colocacao PK
+        atr valor
+    }
+    CENTRO_ENSINO {
+        atr id_centro_ensino PK
+        atr sigla
+        atr nome
+    }
+    CURSO {
+        atr id_curso PK
+        atr nome
+        atr id_centro_ensino FK
+    }
+    FUNCAO {
+        atr id_funcao PK
+        atr nome
+    }
+    EQUIPE {
+        atr id_equipe PK
+        atr chave_play_in
+        atr id_campeonato FK
+        atr id_curso FK
+        atr id_capitao FK
+        atr colocacao_premiacao FK
+    }
+    INSCRICAO {
+        atr id_equipe PK, FK
+        atr data_hora_envio PK
+        atr responsavel_aval
+        atr data_aval
+        atr id_organizador FK
+        atr resultado_decisao
+        atr data_decisao
+        atr motivo_recusa
+    }
+    JOGADOR {
+        atr id_jogador PK
+        atr nome_completo
+        atr nome_exibicao
+        atr matricula
+        atr email
+        atr data_nascimento
+        atr nome_de_jogo
+        atr tag
+        atr riot_id_verificado
+        atr comprovante_matricula
+        atr nome_responsavel
+        atr contato_responsavel
+        atr documento_autorizacao
+        atr id_equipe FK
+        atr id_funcao FK
+    }
+    COACH {
+        atr id_coach PK
+        atr nome
+        atr matricula
+        atr comprovante_matricula
+        atr email
+        atr telefone
+        atr id_equipe FK
+    }
+    PARTIDA {
+        atr id_serie PK, FK
+        atr numero PK
+        atr duracao
+        atr captura_tela
+        atr data_hora_registro
+        atr id_equipe_azul FK
+        atr id_equipe_vermelho FK
+        atr id_equipe_vencedora FK
+        atr id_organizador_julgamento FK
+        atr decisao_julgamento
+        atr data_julgamento
+    }
+    AVALIACAO_RESULTADO {
+        atr id_serie PK, FK
+        atr numero_partida PK, FK
+        atr id_jogador PK, FK
+        atr parecer
+        atr data_hora_parecer
+    }
+    CAMPEAO {
+        atr id_campeao PK
+        atr nome
+    }
+    SELECAO_CAMPEAO {
+        atr id_serie PK, FK
+        atr numero_partida PK, FK
+        atr ordem PK
+        atr tipo
+        atr id_campeao FK
+        atr id_equipe FK
+    }
+    ESCALACAO {
+        atr id_serie PK, FK
+        atr numero_partida PK, FK
+        atr id_jogador PK, FK
+        atr id_funcao FK
+        atr ordem_selecao FK
+    }
+    PUNICAO {
+        atr id_punicao PK
+        atr tipo
+        atr motivo
+        atr data_hora
+        atr id_jogador FK
+        atr id_equipe FK
+        atr id_serie_ocorrencia FK
+        atr numero_partida_ocorrencia FK
+        atr id_serie_cumprimento FK
+        atr numero_partida_cumprimento FK
+        atr id_arbitro FK
+        atr id_organizador FK
+    }
+    ORGANIZADOR ||..o{ CAMPEONATO : cria
+    CAMPEONATO ||--|{ FASE : divide_se_em
+    FASE ||--|{ RODADA : e_composta_por
+    RODADA ||..o{ SERIE : reune
+    SERIE ||--|{ DISPUTA : disputa
+    EQUIPE ||--o{ DISPUTA : disputa
+    ARBITRO ||..o{ SERIE : arbitra
+    FASE ||--o{ CLASSIFICACAO : resulta_em
+    EQUIPE ||..o| CLASSIFICACAO : ocupa
+    CAMPEONATO ||..o{ EQUIPE : participa_de
+    CURSO ||..o{ EQUIPE : representa
+    CENTRO_ENSINO ||..|{ CURSO : pertence_a
+    EQUIPE ||--|{ INSCRICAO : envia
+    ORGANIZADOR |o..o{ INSCRICAO : decide
+    EQUIPE ||..|{ JOGADOR : tem_no_elenco
+    JOGADOR ||..o| EQUIPE : e_capitaneada_por
+    EQUIPE ||..o| COACH : e_orientada_por
+    FUNCAO |o..o{ JOGADOR : e_titular_em
+    ARBITRO ||--o{ VINCULO_ARBITRO_CURSO : tem_vinculo_com
+    CURSO ||--o{ VINCULO_ARBITRO_CURSO : tem_vinculo_com
+    SERIE ||--o{ PARTIDA : e_disputada_em
+    EQUIPE |o..o{ PARTIDA : joga_lado_azul
+    EQUIPE |o..o{ PARTIDA : joga_lado_vermelho
+    EQUIPE ||..o{ PARTIDA : vence
+    PARTIDA ||--o{ AVALIACAO_RESULTADO : avalia_resultado
+    JOGADOR ||--o{ AVALIACAO_RESULTADO : avalia_resultado
+    ORGANIZADOR |o..o{ PARTIDA : julga_contestacao
+    PARTIDA ||--o{ ESCALACAO : inclui
+    JOGADOR ||--o{ ESCALACAO : escala
+    FUNCAO ||..o{ ESCALACAO : atribui
+    PARTIDA ||--o{ SELECAO_CAMPEAO : registra
+    CAMPEAO ||..o{ SELECAO_CAMPEAO : seleciona
+    EQUIPE ||..o{ SELECAO_CAMPEAO : realiza
+    SELECAO_CAMPEAO ||..o| ESCALACAO : usa
+    CAMPEONATO ||--o{ PATROCINIO : patrocina
+    PATROCINADOR ||--|{ PATROCINIO : patrocina
+    CAMPEONATO ||--o{ PREMIACAO : oferece
+    PREMIACAO |o..o{ EQUIPE : contempla
+    JOGADOR |o..o{ PUNICAO : recai_sobre_jogador
+    EQUIPE |o..o{ PUNICAO : recai_sobre_equipe
+    PARTIDA |o..o{ PUNICAO : ocorre_em
+    PARTIDA |o..o{ PUNICAO : e_cumprida_em
+    ARBITRO |o..o{ PUNICAO : aplica_arbitro
+    ORGANIZADOR |o..o{ PUNICAO : aplica_organizador

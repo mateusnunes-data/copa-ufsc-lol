@@ -1,0 +1,99 @@
+@startchen mer_completo_4_punicoes_patrocinio_premiacao
+' ============================================================
+' MER COMPLETO - ÁREA 4: PUNIÇÕES, PATROCÍNIO E PREMIAÇÃO
+' Entidades desta área com todos os atributos:
+'   PUNICAO, PATROCINADOR, PREMIACAO
+' Entidades de outras áreas sem atributos:
+'   CAMPEONATO, EQUIPE, JOGADOR, PARTIDA, ARBITRO, ORGANIZADOR
+' ------------------------------------------------------------
+' Convenção (leitura pelo lado oposto): cada linha liga o losango a UMA entidade B
+' ("B -(mín,máx)- rel" ou "rel -(mín,máx)- B"); o par responde
+' "para cada A (a outra entidade), quantos B?" e fica junto de B.
+' <<key>> em entidade fraca = identificador parcial.
+' ============================================================
+
+entity PUNICAO {
+  id_punicao <<key>>
+  tipo
+  motivo
+  data_hora
+}
+
+entity PATROCINADOR {
+  id_patrocinador <<key>>
+  nome
+  ramo_atividade
+  contato {
+    email
+    telefone
+  }
+}
+
+entity PREMIACAO <<weak>> {
+  colocacao <<key>>
+  valor
+}
+
+' --- entidades de outras áreas (sem atributos) ---
+entity CAMPEONATO {
+}
+entity EQUIPE {
+}
+entity JOGADOR {
+}
+entity PARTIDA <<weak>> {
+}
+entity ARBITRO {
+}
+entity ORGANIZADOR {
+}
+
+' --- relacionamentos ---
+relationship "patrocina" as patrocina {
+  valor_cota
+}
+relationship "oferece" as oferece <<identifying>> {
+}
+relationship "contempla" as contempla {
+}
+relationship "recai sobre (jogador)" as recai_sobre_jogador {
+}
+relationship "recai sobre (equipe)" as recai_sobre_equipe {
+}
+relationship "ocorre em" as ocorre_em {
+}
+relationship "é cumprida em" as e_cumprida_em {
+}
+relationship "aplica (árbitro)" as aplica_arbitro {
+}
+relationship "aplica (organizador)" as aplica_organizador {
+}
+
+PATROCINADOR -(0,N)- patrocina
+patrocina -(1,N)- CAMPEONATO
+
+CAMPEONATO -(1,1)- oferece
+oferece =(0,N)= PREMIACAO
+
+PREMIACAO -(0,1)- contempla
+contempla -(0,N)- EQUIPE
+
+JOGADOR -(0,1)- recai_sobre_jogador
+recai_sobre_jogador -(0,N)- PUNICAO
+
+EQUIPE -(0,1)- recai_sobre_equipe
+recai_sobre_equipe -(0,N)- PUNICAO
+
+PARTIDA -(0,1)- ocorre_em
+ocorre_em -(0,N)- PUNICAO
+
+PARTIDA -(0,1)- e_cumprida_em
+e_cumprida_em -(0,N)- PUNICAO
+
+ARBITRO -(0,1)- aplica_arbitro
+aplica_arbitro -(0,N)- PUNICAO
+
+ORGANIZADOR -(0,1)- aplica_organizador
+aplica_organizador -(0,N)- PUNICAO
+
+@endchen
